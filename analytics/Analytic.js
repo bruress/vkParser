@@ -31,13 +31,24 @@ class WallAnalytic {
             const filtered = this.periodFilter.filter(posts, period);
             const formatDate = fd => new Date(fd * 1000).toISOString().slice(0, 10);
             
-            const [text, comments, likes, reposts, views] = await Promise.all([
+            // start all parsers and wait when it will end with errors or without
+            const results = await Promise.allSettled([
                 this.parsers.text.parseText(filtered),
                 this.parsers.comments.parseComment(filtered),
                 this.parsers.likes.parseLike(filtered),
                 this.parsers.reposts.parseRepost(filtered),
                 this.parsers.views.parseView(filtered),
             ]);
+            // to not fall
+            const [text, comments, likes, reposts, views]=results.map(r =>
+                r.status === "fulfilled" ? r.value : filtered.map(() => ({
+                    text: "",
+                    comment: 0,
+                    like: 0,
+                    repost: 0,
+                    view: 0
+                }))
+            );
 
             return filtered.map((post, i) => ({
                 id: post.id,
