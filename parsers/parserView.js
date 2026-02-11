@@ -1,10 +1,15 @@
 class ViewParser {
 
     parseView(posts) {
-        return posts.map(post => ({
-            id: post.id,
-            view: post.views.count
-        }));
+        try {
+            return posts.map(post => ({
+                id: post.id,
+                view: post.views.count
+            }));
+        } catch (error) {
+            console.error("parseView Error: ", error.message);
+            return [];
+        }
     };
 };
 

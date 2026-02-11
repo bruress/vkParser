@@ -1,9 +1,15 @@
 class CommentParser { 
     parseComment (posts) {
-        return posts.map(post => ({
-            id: post.id,
-            comment: post.comments.count
-        }));
+        try {
+            return posts.map(post => ({
+                id: post.id,
+                comment: post.comments.count
+            }));
+        }
+        catch (error) {
+            console.error("parseComment Error: ", error.message);
+            return [];
+        }
     };
 };
 

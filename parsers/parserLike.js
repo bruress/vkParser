@@ -1,10 +1,14 @@
 class LikeParser {
     parseLike (posts) {
-
-        return posts.map(post => ({
-            id: post.id,
-            like: post.likes.count
-        }));
+        try {
+            return posts.map(post => ({
+                id: post.id,
+                like: post.likes.count
+            }));
+        } catch (error) {
+            console.error("parseLike Error: ", error.message);
+            return [];
+        }
     };
 };
 
